@@ -36,7 +36,11 @@ class RegisteredUserController extends Controller
         $userAttributes['tenant'] = $tenants[$tenant];
         $response = Http::post("$tenant.localhost:8000/register/", $userAttributes);
 
-        dd($response->status());
+        if($response->status() < 300){
+            session()->forget(['token', 'username', 'email']);
+            session(['token' => $response->json()['token'], 'username' => $response->json()['user']['username'], 'email' => $response->json()['user']['email']]);
+            return redirect('/');
+        }
 
         // Auth::login($user);
 

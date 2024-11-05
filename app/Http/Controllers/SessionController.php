@@ -28,7 +28,7 @@ class SessionController extends Controller
     public function store(){
         // validate
         $creds = request()->validate([
-            'username' => ['required', 'email'],
+            'username' => ['required'],
             'password' => ['required'],
             'account_type' => ['required']
         ]);
@@ -43,11 +43,12 @@ class SessionController extends Controller
                 'username' => 'Sorry, these credentials do not match.'
             ]);
         }
-        Session::put('token', $response->json()->token);
+        session()->forget('token');
+        session(['token' => $response->json()['token'], 'username' => $response->json()['username'], 'email' => $response->json()['email']]);
         // regenerate the token
         request()->session()->regenerate();
-        //todo: dashboard view
         return redirect('/dashboard');
+        
     }
 
 
@@ -57,7 +58,8 @@ class SessionController extends Controller
      */
     public function destroy()
     {
-        Auth::logout();
+        // Auth::logout();
+        session()->forget(['token', 'username', 'email']);
         return redirect('/');
     }
 }
