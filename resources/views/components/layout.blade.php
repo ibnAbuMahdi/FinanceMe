@@ -46,13 +46,15 @@
                 </div>
             @endif
 
-           
+
         </nav>
 
         <main class="mt-10 max-w-[926px] mx-auto">
             {{ $slot }}
         </main>
     </div>
+
+    @stack('scripts')    
 </body>
 
 </html>
