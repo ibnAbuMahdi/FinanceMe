@@ -5,7 +5,7 @@
         <tr>
             <th>
                 <span class="flex items-center">
-                    Name
+                    Title
                     <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
                     </svg>
@@ -21,7 +21,7 @@
             </th>
             <th>
                 <span class="flex items-center">
-                    Brand
+                    Description
                     <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
                     </svg>
@@ -29,7 +29,7 @@
             </th>
             <th>
                 <span class="flex items-center">
-                    Price
+                    Amount
                     <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
                     </svg>
@@ -37,7 +37,7 @@
             </th>
             <th>
                 <span class="flex items-center">
-                    Stock
+                    Date
                     <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
                     </svg>
@@ -45,33 +45,18 @@
             </th>
             <th>
                 <span class="flex items-center">
-                    Total Sales
+                    Budget
                     <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
                     </svg>
                 </span>
             </th>
-            <th>
-                <span class="flex items-center">
-                    Status
-                    <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4"/>
-                    </svg>
-                </span>
-            </th>
+           
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td class="font-medium text-white whitespace-nowrap dark:text-white">Apple iMac</td>
-            <td>Computers</td>
-            <td>Apple</td>
-            <td>$1,299</td>
-            <td>50</td>
-            <td>200</td>
-            <td>In Stock</td>
-        </tr>
-        <tr>
+        {{ $slot }}
+        <!-- <tr>
             <td class="font-medium text-white whitespace-nowrap dark:text-white">Apple iPhone</td>
             <td>Mobile Phones</td>
             <td>Apple</td>
@@ -313,7 +298,7 @@
             <td>20</td>
             <td>100</td>
             <td>In Stock</td>
-        </tr>
+        </tr> -->
     </tbody>
 </table>
 

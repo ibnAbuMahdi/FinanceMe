@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\JobController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\RegisteredUserController;
-use App\Http\Controllers\SearchController;
+use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\GeneralController;
 use Illuminate\Support\Facades\Route;
@@ -18,11 +18,15 @@ Route::middleware('guest')->group(function (){
 
 });
 Route::get('/', [SessionController::class, 'create']);
-Route::get('/dashboard', [GeneralController::class, 'dashboard']);
-Route::get('/budgets', [GeneralController::class, 'budgets']);
-Route::get('/transactions', [GeneralController::class, 'transactions']);
-Route::get('/history', [GeneralController::class, 'history']);
-
 Route::delete('/logout', [SessionController::class, 'destroy']);
+
+Route::get('/history', [GeneralController::class, 'history']);
+Route::get('/dashboard', [GeneralController::class, 'dashboard']);
+
+Route::get('/budgets', [BudgetController::class, 'list']);
+
+Route::get('/transactions', [TransactionController::class, 'list']);
+Route::post('/transactions', [TransactionController::class, 'create']);
+Route::delete('/transactions/{id}', [TransactionController::class, 'destroy']);
 
 

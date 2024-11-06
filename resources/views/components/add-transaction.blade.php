@@ -1,6 +1,6 @@
     <x-panel class="basis-1/4">
         <h3 class="font-bold text-lg">Add Transaction</h3>
-        <x-forms.form method="POST" action="/add-transaction">
+        <x-forms.form method="POST" action="/transactions">
             <x-forms.input label="Title" name="title" type="text" />
             <x-forms.input label="Amount" name="amount" type="number" />
             <x-forms.input label="Description" name="description" type="text" />
