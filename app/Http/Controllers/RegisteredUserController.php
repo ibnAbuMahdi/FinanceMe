@@ -38,7 +38,7 @@ class RegisteredUserController extends Controller
 
         if($response->status() < 300){
             session()->forget(['token', 'username', 'email']);
-            session(['token' => $response->json()['token'], 'username' => $response->json()['user']['username'], 'email' => $response->json()['user']['email']]);
+            session(['tenant' => $tenant, 'token' => $response->json()['token'], 'username' => $response->json()['user']['username'], 'email' => $response->json()['user']['email']]);
             return redirect('/');
         }
 

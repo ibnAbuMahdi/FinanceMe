@@ -19,6 +19,9 @@ Route::middleware('guest')->group(function (){
 });
 Route::get('/', [SessionController::class, 'create']);
 Route::get('/dashboard', [GeneralController::class, 'dashboard']);
+Route::get('/budgets', [GeneralController::class, 'budgets']);
+Route::get('/transactions', [GeneralController::class, 'transactions']);
+Route::get('/history', [GeneralController::class, 'history']);
 
 Route::delete('/logout', [SessionController::class, 'destroy']);
 

@@ -25,9 +25,10 @@
 
             @if(session('token'))
                 <div class="space-x-6 font-bold flex">
-                    <a>Dashboard</a>
-                    <a>Transactions</a>
-                    <a>History</a>
+                    <a href="/dashboard">Dashboard</a>
+                    <a href="/transactions">Transactions</a>
+                    <a href="/budgets">Budgets</a>
+                    <a href="/history">History</a>
                 </div>
                 <div class="space-x-6 font-bold flex">
 
@@ -49,12 +50,16 @@
 
         </nav>
 
-        <main class="mt-10 max-w-[926px] mx-auto">
+        <main class="mt-5 mx-auto">
+            @if(count($errors))
+                <x-error-alert>{{ $errors->first() }}</x-error-alert>
+            @endif
             {{ $slot }}
         </main>
     </div>
 
-    @stack('scripts')    
+    @stack('scripts')
+    @stack('budget-scripts')
 </body>
 
 </html>
