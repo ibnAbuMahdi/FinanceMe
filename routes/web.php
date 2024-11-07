@@ -24,6 +24,7 @@ Route::get('/history', [GeneralController::class, 'history']);
 Route::get('/dashboard', [GeneralController::class, 'dashboard']);
 
 Route::get('/budgets', [BudgetController::class, 'list']);
+Route::post('/budgets', [BudgetController::class, 'create']);
 
 Route::get('/transactions', [TransactionController::class, 'list']);
 Route::post('/transactions', [TransactionController::class, 'create']);

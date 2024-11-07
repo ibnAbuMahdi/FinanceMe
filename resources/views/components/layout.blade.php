@@ -54,6 +54,12 @@
             @if(count($errors))
                 <x-error-alert>{{ $errors->first() }}</x-error-alert>
             @endif
+            @if (session('budget-add'))
+                <x-success-alert>{{ session('budget-add') }}</x-success-alert>
+            @endif
+            @if (session('transaction-add'))
+                <x-success-alert>{{ session('transaction-add') }}</x-success-alert>
+            @endif
             {{ $slot }}
         </main>
     </div>

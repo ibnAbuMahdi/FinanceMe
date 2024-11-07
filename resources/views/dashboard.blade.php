@@ -8,21 +8,16 @@
             <x-forms.label label="Total Transactions" name="total_transactions"></x-forms.label>
     
             <x-panel class="space-y-6 gap-x-6">
+                @foreach ($data[0]['budget_transactions'] as $budget)
                 <div>
-                    <label class="font-bold">Budget1</label>
+                    <label class="font-bold">{{ $budget['title'] }}</label>
                     <div class="w-full bg-gray-200 rounded-full dark:bg-gray-700">
                         <div class="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full"
-                            style="width: 45%"> 45%</div>
+                            style="width: {{round(($budget['total_amount']/$budget['amount'])*100)}}%">  {{round(($budget['total_amount']/$budget['amount'])*100)}}</div>
                     </div>
                 </div>
     
-                <div>
-                    <label class="font-bold">Budget2</label>
-                    <div class="w-full bg-gray-200 rounded-full dark:bg-gray-700">
-                        <div class="bg-red-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full"
-                            style="width: 45%"> 45%</div>
-                    </div>
-                </div>
+                @endforeach
             </x-panel>
     
             <x-forms.label label="Transactions" name="transactions"></x-forms.label>
@@ -322,6 +317,13 @@
 
     @push('scripts')
         <script>
+            let data = @json($data);
+            let amounts = []
+            let dates = []
+            data[0].recent_transactions.forEach(e => {
+                amounts.push(e.amount)
+                dates.push(e.date)
+            });
             document.addEventListener("DOMContentLoaded", function () {
                 const options = {
                     chart: {
@@ -368,29 +370,36 @@
                     },
                     series: [
                         {
-                            name: "New users",
-                            data: [6500, 6418, 6456, 6526, 6356, 6456],
+                            name: "Budget1",
+                            data:amounts,
+                            // data: [6500, 6418, 6456, 6526, 6356, 6456],
                             color: "#1A56DB",
+                        },
+                        {
+                            name: "Budget2",
+                            // data:amounts,
+                            data: [50, 18, 64, 23, 66, 64],
+                            color: "#fc3503",
                         },
                     ],
                     xaxis: {
-                        categories: ['01 February', '02 February', '03 February', '04 February', '05 February', '06 February', '07 February'],
+                        categories: dates,
+                        // categories: ['01 February', '02 February', '03 February', '04 February', '05 February', '06 February', '07 February'],
                         labels: {
-                            show: false,
+                            show: true,
                         },
                         axisBorder: {
-                            show: false,
+                            show: true,
                         },
                         axisTicks: {
                             show: false,
                         },
                     },
                     yaxis: {
-                        show: false,
+                        show: true,
                     },
                 }
 
-                console.log(document.getElementById("area-chart"))
                 if (document.getElementById("area-chart") && typeof ApexCharts !== 'undefined') {
                     const chart = new ApexCharts(document.getElementById("area-chart"), options);
                     chart.render();

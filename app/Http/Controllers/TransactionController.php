@@ -22,17 +22,21 @@ class TransactionController extends Controller
             'title'=>['required'],
             'category'=>[],
             'description'=>[],
-            'amount'=>['required']
-            
+            'amount'=>['required'],
+            'budget' => []
         ]);
         $tenants = ['personal' => 1, 'corporate' => 2];
         $data['tenant'] = $tenants[$tenant];
+        $budgets_array = [];
+        foreach(session('budgets') as $budget){
+            $budgets_array[$budget['id']] = $budget['title'];
+        }
+        $data['budget'] = array_search($data['budget'], $budgets_array);
         $response = Http::withToken(session('token'))->post("$tenant.localhost:8000/transactions/", $data);
         if(!$response->successful()){
-            $response->throw();
             return back()->withErrors("An error was encountered.");
         }
-        return redirect('dashboard');
+        return redirect('dashboard')->with('transaction-add', 'Transaction added successfully!');;
     }
 
     public function view(){
