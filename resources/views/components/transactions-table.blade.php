@@ -1,6 +1,6 @@
-<x-panel>
+<x-panel class="bg-white">
     
-<table id="filter-table">
+<table id="filter-table" class="bg-white">
     <thead>
         <tr>
             <th>

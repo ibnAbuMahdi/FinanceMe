@@ -2,5 +2,5 @@
     <x-page-heading>
         History
     </x-page-heading>
-    <x-history-chart></x-history-chart>
+    <x-history-chart :$data></x-history-chart>
 </x-layout>

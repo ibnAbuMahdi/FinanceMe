@@ -15,7 +15,6 @@ class BudgetController extends Controller
         }
         return view('budgets', ['data' => $response->json()]);
     }
-    
 
     public function create(Request $request){
         $tenant = session('tenant');

@@ -1,3 +1,4 @@
+@props(['data'])
 <x-panel>
 
     <div class="w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
@@ -13,122 +14,54 @@
                     </svg>
                 </div>
                 <div>
-                    <h5 class="leading-none text-2xl font-bold text-gray-900 dark:text-white pb-1">3.4k</h5>
-                    <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Leads generated per week</p>
+                    <h5 id=totalSpent class="leading-none text-2xl font-bold text-gray-900 dark:text-white pb-1"></h5>
+                    <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Total Spent</p>
                 </div>
             </div>
-            <div>
-                <span
-                    class="bg-green-100 text-green-800 text-xs font-medium inline-flex items-center px-2.5 py-1 rounded-md dark:bg-green-900 dark:text-green-300">
-                    <svg class="w-2.5 h-2.5 me-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 10 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M5 13V1m0 0L1 5m4-4 4 4" />
-                    </svg>
-                    42.5%
-                </span>
-            </div>
+            
         </div>
 
         <div class="grid grid-cols-2">
             <dl class="flex items-center">
-                <dt class="text-gray-500 dark:text-gray-400 text-sm font-normal me-1">Money spent:</dt>
-                <dd class="text-gray-900 text-sm dark:text-white font-semibold">$3,232</dd>
+                <dt class="text-gray-500 dark:text-gray-400 text-sm font-normal me-1">Average total spending:</dt>
+                <dd id="averageSpending" class="text-gray-900 text-sm dark:text-white font-semibold"></dd>
             </dl>
-            <dl class="flex items-center justify-end">
-                <dt class="text-gray-500 dark:text-gray-400 text-sm font-normal me-1">Conversion rate:</dt>
-                <dd class="text-gray-900 text-sm dark:text-white font-semibold">1.2%</dd>
-            </dl>
+            
         </div>
 
         <div id="column-chart"></div>
-        <div class="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">
-            <div class="flex justify-between items-center pt-5">
-                <!-- Button -->
-                <button id="dropdownDefaultButton" data-dropdown-toggle="lastDaysdropdown"
-                    data-dropdown-placement="bottom"
-                    class="text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 text-center inline-flex items-center dark:hover:text-white"
-                    type="button">
-                    Last 7 days
-                    <svg class="w-2.5 m-2.5 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 10 6">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="m1 1 4 4 4-4" />
-                    </svg>
-                </button>
-                <!-- Dropdown menu -->
-                <div id="lastDaysdropdown"
-                    class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
-                        <li>
-                            <a href="#"
-                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Yesterday</a>
-                        </li>
-                        <li>
-                            <a href="#"
-                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Today</a>
-                        </li>
-                        <li>
-                            <a href="#"
-                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last
-                                7 days</a>
-                        </li>
-                        <li>
-                            <a href="#"
-                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last
-                                30 days</a>
-                        </li>
-                        <li>
-                            <a href="#"
-                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last
-                                90 days</a>
-                        </li>
-                    </ul>
-                </div>
-                <a href="#"
-                    class="uppercase text-sm font-semibold inline-flex items-center rounded-lg text-blue-600 hover:text-blue-700 dark:hover:text-blue-500  hover:bg-gray-100 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 px-3 py-2">
-                    Leads Report
-                    <svg class="w-2.5 h-2.5 ms-1.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                        fill="none" viewBox="0 0 6 10">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="m1 9 4-4-4-4" />
-                    </svg>
-                </a>
-            </div>
-        </div>
+        
     </div>
     @push('scripts')
         <script>
             document.addEventListener("DOMContentLoaded", function () {
+                let data = @json($data);
+                let budget_amount = []
+                let actual_amount = []
+                data.forEach(e => {
+                    budget_amount.push({x: e.title, y: e.amount})
+                    actual_amount.push({x: e.title, y: e.total_amount})
+                });
+                const total_spend = sum(actual_amount)
+                const average_spend = avg(actual_amount)
+                const total_element =document.getElementById('totalSpent')
+                total_element.innerText(total_spend)
+
+                const average_element =document.getElementById('averageSpending')
+                average_element.innerText(average_spend)
 
                 const options = {
                     colors: ["#1A56DB", "#FDBA8C"],
                     series: [
                         {
-                            name: "Organic",
+                            name: "Budget Amount",
                             color: "#1A56DB",
-                            data: [
-                                { x: "Mon", y: 231 },
-                                { x: "Tue", y: 122 },
-                                { x: "Wed", y: 63 },
-                                { x: "Thu", y: 421 },
-                                { x: "Fri", y: 122 },
-                                { x: "Sat", y: 323 },
-                                { x: "Sun", y: 111 },
-                            ],
+                            data: budget_amount,
                         },
                         {
-                            name: "Social media",
+                            name: "Actual Amount",
                             color: "#FDBA8C",
-                            data: [
-                                { x: "Mon", y: 232 },
-                                { x: "Tue", y: 113 },
-                                { x: "Wed", y: 341 },
-                                { x: "Thu", y: 224 },
-                                { x: "Fri", y: 522 },
-                                { x: "Sat", y: 411 },
-                                { x: "Sun", y: 243 },
-                            ],
+                            data: actual_amount,
                         },
                     ],
                     chart: {
