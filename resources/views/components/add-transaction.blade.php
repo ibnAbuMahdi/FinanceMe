@@ -1,3 +1,4 @@
+@props(['data'])
 <x-panel class="basis-1/4">
     <h3 class="font-bold text-lg">Add Transaction</h3>
     <x-forms.form method="POST" action="/transactions">
@@ -6,15 +7,15 @@
         <x-forms.input label="Description" name="description" type="text" />
             <x-forms.input label="Category" name="category" type="text" />
             <x-forms.select label="Budget" name="budget">
-                @if (session('budgets'))
-                    @foreach (session('budgets') as $budget)
+                @if ($data['budgets'])
+                    @foreach ($data['budgets'] as $budget)
                         <option>{{ $budget['title'] }}</option>
                     @endforeach
                 @else
                     <option selected>Please create a budget</option>
                 @endif
             </x-forms.select>
-            @if (session('budgets'))
+            @if ($data['budgets'])
                 <x-forms.button>Add</x-forms.button>
             @endif
     </x-forms.form>

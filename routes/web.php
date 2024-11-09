@@ -22,6 +22,7 @@ Route::delete('/logout', [SessionController::class, 'destroy']);
 
 Route::get('/history', [GeneralController::class, 'history']);
 Route::get('/dashboard', [GeneralController::class, 'dashboard']);
+Route::get('/budgets/{id}/transactions', [GeneralController::class, 'showTransactions']);
 
 Route::get('/budgets', [BudgetController::class, 'list']);
 Route::post('/budgets', [BudgetController::class, 'create']);

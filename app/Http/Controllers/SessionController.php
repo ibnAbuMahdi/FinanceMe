@@ -59,7 +59,7 @@ class SessionController extends Controller
     public function destroy()
     {
         // Auth::logout();
-        session()->forget(['tenant', 'token', 'username', 'email']);
+        session()->forget(['tenant', 'token', 'username', 'email', 'selected_budget']);
         return redirect('/');
     }
 }

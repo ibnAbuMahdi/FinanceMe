@@ -3,26 +3,30 @@
         Dashboard
     </x-page-heading>
     <div class="flex flex-row gap-x-6">
-        <x-add-transaction></x-add-transaction>
+        <x-add-transaction :$data></x-add-transaction>
         <div class="basis-1/2">
             <x-forms.label label="Total Transactions" name="total_transactions"></x-forms.label>
-    
+
             <x-panel class="space-y-6 gap-x-6">
-                @foreach ($data[0]['budget_transactions'] as $budget)
-                <div>
-                    <label class="font-bold">{{ $budget['title'] }}</label>
-                    <div class="w-full bg-gray-200 rounded-full dark:bg-gray-700">
-                        <div class="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full"
-                            style="width: {{round(($budget['total_amount']/$budget['amount'])*100)}}%">  {{round(($budget['total_amount']/$budget['amount'])*100)}}</div>
+                @foreach ($data['budgets'] as $budget)
+                    <div>
+                        <label class="font-bold"></label>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-base font-medium text-blue-700 dark:text-white">{{ $budget['title'] }}</span>
+                            <span class="text-sm font-medium text-blue-700 dark:text-white">
+                                {{round(($budget['total_amount'] / $budget['amount']) * 100, 2)}}%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full dark:bg-gray-700">
+                            <div class="bg-blue-600 text-xs font-medium text-blue-100 h-4 text-center p-0.5 leading-none rounded-full"
+                                style="width: {{round(($budget['total_amount'] / $budget['amount']) * 100, 2)}}%"></div>
+                        </div>
                     </div>
-                </div>
-    
                 @endforeach
             </x-panel>
-    
+
             <x-forms.label label="Transactions" name="transactions"></x-forms.label>
             <x-graph-card>
-    
+
                 <div class="w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
                     <div class="flex justify-between">
                         <div>
@@ -34,8 +38,8 @@
                             12%
                             <svg class="w-3 h-3 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 10 14">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13V1m0 0L1 5m4-4 4 4" />
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="M5 13V1m0 0L1 5m4-4 4 4" />
                             </svg>
                         </div>
                     </div>
@@ -44,11 +48,11 @@
                         class="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">
                         <div class="flex justify-between items-center pt-5">
                             <!-- Button -->
-                            <button id="dropdownDefaultButton" data-dropdown-toggle="lastDaysdropdown"
+                            <button id="dropdownDefaultButton" data-dropdown-toggle="budgetsDropdown"
                                 data-dropdown-placement="bottom"
                                 class="text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 text-center inline-flex items-center dark:hover:text-white"
                                 type="button">
-                                Last 7 days
+                                {{ $budget_title }}
                                 <svg class="w-2.5 m-2.5 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                     fill="none" viewBox="0 0 10 6">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -56,33 +60,17 @@
                                 </svg>
                             </button>
                             <!-- Dropdown menu -->
-                            <div id="lastDaysdropdown"
+                            <div id="budgetsDropdown"
                                 class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
                                 <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
                                     aria-labelledby="dropdownDefaultButton">
-                                    <li>
-                                        <a href="#"
-                                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Yesterday</a>
-                                    </li>
-                                    <li>
-                                        <a href="#"
-                                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Today</a>
-                                    </li>
-                                    <li>
-                                        <a href="#"
-                                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last
-                                            7 days</a>
-                                    </li>
-                                    <li>
-                                        <a href="#"
-                                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last
-                                            30 days</a>
-                                    </li>
-                                    <li>
-                                        <a href="#"
-                                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last
-                                            90 days</a>
-                                    </li>
+                                    @foreach ($data['budgets'] as $budget)
+                                        <li>
+                                            <a href="/budgets/{{$budget['id']}}/transactions"
+                                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $budget['title']}}</a>
+                                        </li>
+                                    @endforeach
+
                                 </ul>
                             </div>
                             <a href="#"
@@ -97,13 +85,13 @@
                         </div>
                     </div>
                 </div>
-    
+
             </x-graph-card>
             <x-forms.label label="Transactions Distribution" name="transactions_distribution"></x-forms.label>
             <x-graph-card>
-    
+
                 <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
-    
+
                     <div class="flex justify-between items-start w-full">
                         <div class="flex-col items-center">
                             <div class="flex items-center mb-1">
@@ -122,18 +110,20 @@
                                         <h3 class="font-semibold text-gray-900 dark:text-white">Activity growth -
                                             Incremental</h3>
                                         <p>Report helps navigate cumulative growth of community activities. Ideally, the
-                                            chart should have a growing trend, as stagnating chart signifies a significant
+                                            chart should have a growing trend, as stagnating chart signifies a
+                                            significant
                                             decrease of community activity.</p>
                                         <h3 class="font-semibold text-gray-900 dark:text-white">Calculation</h3>
-                                        <p>For each date bucket, the all-time volume of activities is calculated. This means
+                                        <p>For each date bucket, the all-time volume of activities is calculated. This
+                                            means
                                             that activities in period n contain all activities up to period n, plus the
                                             activities generated by your community in period.</p>
                                         <a href="#"
                                             class="flex items-center font-medium text-blue-600 dark:text-blue-500 dark:hover:text-blue-600 hover:text-blue-700 hover:underline">Read
                                             more <svg class="w-2 h-2 ms-1.5 rtl:rotate-180" aria-hidden="true"
                                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                    stroke-width="2" d="m1 9 4-4-4-4" />
+                                                <path stroke="currentColor" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4" />
                                             </svg></a>
                                     </div>
                                     <div data-popper-arrow></div>
@@ -142,8 +132,8 @@
                             <button id="dateRangeButton" data-dropdown-toggle="dateRangeDropdown"
                                 data-dropdown-ignore-click-outside-class="datepicker" type="button"
                                 class="inline-flex items-center text-blue-700 dark:text-blue-600 font-medium hover:underline">31
-                                Nov - 31 Dev <svg class="w-3 h-3 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                    fill="none" viewBox="0 0 10 6">
+                                Nov - 31 Dev <svg class="w-3 h-3 ms-2" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                         stroke-width="2" d="m1 1 4 4 4-4" />
                                 </svg>
@@ -202,10 +192,10 @@
                                     <li>
                                         <a href="#"
                                             class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"><svg
-                                                class="w-3 h-3 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                fill="none" viewBox="0 0 21 21">
-                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                    stroke-width="2"
+                                                class="w-3 h-3 me-2" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 21 21">
+                                                <path stroke="currentColor" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="2"
                                                     d="M7.418 17.861 1 20l2.139-6.418m4.279 4.279 10.7-10.7a3.027 3.027 0 0 0-2.14-5.165c-.802 0-1.571.319-2.139.886l-10.7 10.7m4.279 4.279-4.279-4.279m2.139 2.14 7.844-7.844m-1.426-2.853 4.279 4.279" />
                                             </svg>Edit widget
                                         </a>
@@ -213,8 +203,9 @@
                                     <li>
                                         <a href="#"
                                             class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"><svg
-                                                class="w-3 h-3 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                fill="currentColor" viewBox="0 0 20 20">
+                                                class="w-3 h-3 me-2" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                viewBox="0 0 20 20">
                                                 <path
                                                     d="M14.707 7.793a1 1 0 0 0-1.414 0L11 10.086V1.5a1 1 0 0 0-2 0v8.586L6.707 7.793a1 1 0 1 0-1.414 1.414l4 4a1 1 0 0 0 1.416 0l4-4a1 1 0 0 0-.002-1.414Z" />
                                                 <path
@@ -225,10 +216,10 @@
                                     <li>
                                         <a href="#"
                                             class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"><svg
-                                                class="w-3 h-3 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                fill="none" viewBox="0 0 18 18">
-                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                    stroke-width="2"
+                                                class="w-3 h-3 me-2" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                                                <path stroke="currentColor" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="2"
                                                     d="m5.953 7.467 6.094-2.612m.096 8.114L5.857 9.676m.305-1.192a2.581 2.581 0 1 1-5.162 0 2.581 2.581 0 0 1 5.162 0ZM17 3.84a2.581 2.581 0 1 1-5.162 0 2.581 2.581 0 0 1 5.162 0Zm0 10.322a2.581 2.581 0 1 1-5.162 0 2.581 2.581 0 0 1 5.162 0Z" />
                                             </svg>Add to repository
                                         </a>
@@ -236,8 +227,9 @@
                                     <li>
                                         <a href="#"
                                             class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"><svg
-                                                class="w-3 h-3 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                fill="currentColor" viewBox="0 0 18 20">
+                                                class="w-3 h-3 me-2" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                viewBox="0 0 18 20">
                                                 <path
                                                     d="M17 4h-4V2a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v2H1a1 1 0 0 0 0 2h1v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6h1a1 1 0 1 0 0-2ZM7 2h4v2H7V2Zm1 14a1 1 0 1 1-2 0V8a1 1 0 0 1 2 0v8Zm4 0a1 1 0 0 1-2 0V8a1 1 0 0 1 2 0v8Z" />
                                             </svg>Delete widget
@@ -247,10 +239,10 @@
                             </div>
                         </div>
                     </div>
-    
+
                     <!-- Line Chart -->
                     <div class="py-6" id="pie-chart"></div>
-    
+
                     <div
                         class="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">
                         <div class="flex justify-between items-center pt-5">
@@ -307,7 +299,7 @@
                         </div>
                     </div>
                 </div>
-    
+
             </x-graph-card>
         </div>
         <x-add-budget></x-add-budget>
@@ -320,7 +312,7 @@
             let data = @json($data);
             let amounts = []
             let dates = []
-            data[0].recent_transactions.forEach(e => {
+            data.budget_transactions.forEach(e => {
                 amounts.push(e.amount)
                 dates.push(e.date)
             });
@@ -371,16 +363,10 @@
                     series: [
                         {
                             name: "Budget1",
-                            data:amounts,
+                            data: amounts,
                             // data: [6500, 6418, 6456, 6526, 6356, 6456],
                             color: "#1A56DB",
-                        },
-                        {
-                            name: "Budget2",
-                            // data:amounts,
-                            data: [50, 18, 64, 23, 66, 64],
-                            color: "#fc3503",
-                        },
+                        },                       
                     ],
                     xaxis: {
                         categories: dates,
@@ -470,5 +456,6 @@
                 }
             });
         </script>
+
     @endpush
 </x-layout>
