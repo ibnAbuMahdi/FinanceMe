@@ -4,6 +4,10 @@
     <x-forms.form method="POST" action="/transactions">
         <x-forms.input label="Title" name="title" type="text" />
         <x-forms.input label="Amount" name="amount" type="number" step="0.01" min=0 />
+        <div class="flex flex-col-2">
+            <x-forms.input label="Date" name="date" type="date" />
+            <x-forms.input label="Time" name="time" type="time" />
+        </div>
         <x-forms.input label="Description" name="description" type="text" />
             <x-forms.input label="Category" name="category" type="text" />
             <x-forms.select label="Budget" name="budget">

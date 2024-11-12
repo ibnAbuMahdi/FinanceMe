@@ -2,12 +2,16 @@
     <x-page-heading>
         Dashboard
     </x-page-heading>
+    <div class="flex justify-between">
+    <button type="button" data-modal-target="transaction-modal" data-modal-toggle="transaction-modal" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">+ Add Transaction</button>
+    <button type="button" data-modal-target="budget-modal" data-modal-toggle="budget-modal" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">+ Add Budget</button>
+    </div>
     <div class="flex flex-row gap-x-6">
-        <x-add-transaction :$data></x-add-transaction>
-        <div class="basis-1/2">
+        <!-- <x-add-transaction :$data></x-add-transaction> -->
+        <div class="w-full">
             <x-forms.label label="Total Transactions" name="total_transactions"></x-forms.label>
 
-            <x-panel class="space-y-6 gap-x-6">
+            <x-panel class="space-y-6 gap-x-6 mb-3">
                 @foreach ($data['budgets'] as $budget)
                     <div>
                         <label class="font-bold"></label>
@@ -33,6 +37,8 @@
                             <h5 class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">
                                 @if (count($data['budget_transactions']))
                                     {{ $data['averages']['recent_average']['amount__avg'] }}
+                                @else
+                                    {{ 0 }}
                                 @endif
                             </h5>
                             <p class="text-base font-normal text-gray-500 dark:text-gray-400">average spending</p>
@@ -127,10 +133,11 @@
 
             </x-graph-card>
         </div>
-        <x-add-budget></x-add-budget>
+        <!-- <x-add-budget></x-add-budget> -->
     </div>
 
-
+<x-add-budget-modal></x-add-budget-modal>
+<x-add-transaction-modal :$data></x-add-transaction-modal>
 
     @push('scripts')
         <script>
@@ -140,7 +147,7 @@
             let amounts = []
             let dates = []
             data.budget_transactions.forEach(e => {
-                amounts.push(e.amount)
+                amounts.push(e.amount ?? 0)
                 dates.push(e.date)
             });
             document.addEventListener("DOMContentLoaded", function () {
@@ -226,7 +233,7 @@
                 }
 
                 data.budgets.forEach(e => {
-                    series.push(e.total_amount)
+                    series.push(e.total_amount ?? 0)
                     labels.push(e.title)
                 });
                 const getChartOptions = () => {

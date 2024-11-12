@@ -1,5 +1,5 @@
 @props(['data'])
-<x-panel>
+<x-panel class="mb-5">
 
     <div class="w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
         <div class="flex justify-between pb-4 mb-4 border-b border-gray-200 dark:border-gray-700">
@@ -15,7 +15,7 @@
                 </div>
                 <div>
                     <h5 id=totalSpent class="leading-none text-2xl font-bold text-gray-900 dark:text-white pb-1"></h5>
-                    <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Total Spent</p>
+                    <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Total spending</p>
                 </div>
             </div>
             
@@ -23,7 +23,7 @@
 
         <div class="grid grid-cols-2">
             <dl class="flex items-center">
-                <dt class="text-gray-500 dark:text-gray-400 text-sm font-normal me-1">Average total spending:</dt>
+                <dt class="text-gray-500 dark:text-gray-400 text-sm font-normal me-1">Average spending:</dt>
                 <dd id="averageSpending" class="text-gray-900 text-sm dark:text-white font-semibold"></dd>
             </dl>
             
@@ -32,6 +32,7 @@
         <div id="column-chart"></div>
         
     </div>
+
     @push('scripts')
         <script>
             document.addEventListener("DOMContentLoaded", function () {
@@ -42,13 +43,14 @@
                     budget_amount.push({x: e.title, y: e.amount})
                     actual_amount.push({x: e.title, y: e.total_amount})
                 });
-                const total_spend = sum(actual_amount)
-                const average_spend = avg(actual_amount)
-                const total_element =document.getElementById('totalSpent')
-                total_element.innerText(total_spend)
-
-                const average_element =document.getElementById('averageSpending')
-                average_element.innerText(average_spend)
+                let arr = []
+                actual_amount.map((e) => {arr.push(e.y)})
+                let total_spend =  arr.reduce((a,b) => a + b)
+                let average_spend = total_spend/actual_amount.length
+                let total_element =document.getElementById('totalSpent')
+                total_element.innerHTML = total_spend
+                let average_element =document.getElementById('averageSpending')
+                average_element.innerHTML = average_spend
 
                 const options = {
                     colors: ["#1A56DB", "#FDBA8C"],

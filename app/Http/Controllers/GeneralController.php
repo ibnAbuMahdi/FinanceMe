@@ -6,11 +6,10 @@ use Illuminate\Http\Request;
 
 class GeneralController extends Controller
 {
-    public function dashboard(){
+    public function dashboard(string $id=null){
         $tenant = session('tenant');
-        $selected_budget = session('selected_budget');
-        $response = $selected_budget ?
-            Http::withToken(session('token'))->get("$tenant.localhost:8000/dashboard/budgets/$selected_budget/")
+        $response = $id ?
+            Http::withToken(session('token'))->get("$tenant.localhost:8000/dashboard/budgets/$id/")
         :
             Http::withToken(session('token'))->get("$tenant.localhost:8000/dashboard/");
         
@@ -18,10 +17,11 @@ class GeneralController extends Controller
             $response->throw();
             return back()->withErrors("An error was encountered.");
         }
+        // dd($response->json());
         $budget_title = false;
         $budgets = $response->json()[0]['budgets'];
         foreach($budgets as $budget){
-            if ($selected_budget == $budget['id']) $budget_title = $budget['title']; 
+            if ($id == $budget['id']) $budget_title = $budget['title']; 
         }
         if(!$budget_title && count($budgets)) $budget_title = $budgets[0]['title']; 
         session(['budgets' => $response->json()[0]['budgets']]);
@@ -29,8 +29,7 @@ class GeneralController extends Controller
     }
 
     public function showTransactions(string $id){
-        session('selected_budget', $id);
-        return redirect('/dashboard');
+        return redirect("/dashboard/$id");
     }
     public function history(){
         $tenant = session('tenant');

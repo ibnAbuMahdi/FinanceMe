@@ -43,23 +43,20 @@
             @else
                 <div class="space-x-6 font-bold">
                     <a href="/register">Sign Up</a>
-                    <a href="/login">Log In</a>
                 </div>
             @endif
 
 
         </nav>
 
-        <main class="mt-5 mx-auto">
+        <main class="mt-5 max-w-[926px] mx-auto">
             @if(count($errors))
                 <x-error-alert>{{ $errors->first() }}</x-error-alert>
             @endif
-            @if (session('budget-add'))
-                <x-success-alert>{{ session('budget-add') }}</x-success-alert>
+            @if (session('success-alert'))
+                <x-success-alert>{{ session('success-alert') }}</x-success-alert>
             @endif
-            @if (session('transaction-add'))
-                <x-success-alert>{{ session('transaction-add') }}</x-success-alert>
-            @endif
+            
             {{ $slot }}
         </main>
     </div>
