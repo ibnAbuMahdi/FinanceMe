@@ -22,7 +22,7 @@
                         </div>
                         <div class="w-full bg-gray-200 rounded-full dark:bg-gray-700">
                             <div class="bg-blue-600 text-xs font-medium text-blue-100 h-4 text-center p-0.5 leading-none rounded-full"
-                                style="width: {{round(($budget['total_amount'] / $budget['amount']) * 100, 2)}}%"></div>
+                                style="width: {{min(round(($budget['total_amount'] / $budget['amount']) * 100, 2), 100)}}%"></div>
                         </div>
                     </div>
                 @endforeach
