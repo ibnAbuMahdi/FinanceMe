@@ -7,14 +7,12 @@ use Illuminate\Http\Request;
 class GeneralController extends Controller
 {
     public function dashboard(string $id=null){
-        $tenant = session('tenant');
         $response = $id ?
-            Http::withToken(session('token'))->get("$tenant.localhost:8000/dashboard/budgets/$id/")
+            Http::withToken(session('token'))->get("{$this->base_url}dashboard/budgets/$id/")
         :
-            Http::withToken(session('token'))->get("$tenant.localhost:8000/dashboard/");
+            Http::withToken(session('token'))->get("{$this->base_url}dashboard/");
         
-        if($response->status() != 200){
-            $response->throw();
+        if(!$response->successful()){
             return back()->withErrors("An error was encountered.");
         }
         // dd($response->json());
@@ -32,10 +30,9 @@ class GeneralController extends Controller
         return redirect("/dashboard/$id");
     }
     public function history(){
-        $tenant = session('tenant');
-        $response = Http::withToken(session('token'))->get("$tenant.localhost:8000/budgets/history/");
+        $response = Http::withToken(session('token'))->get("{$this->base_url}budgets/history/");
         
-        if($response->status() != 200){
+        if(!$response->successful()){
             $response->throw();
             return back()->withErrors("An error was encountered.");
         }

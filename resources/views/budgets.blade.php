@@ -48,7 +48,7 @@
             @endforeach
         @endif
     </x-budgets-table>
-    <x-budget-modal></x-budget-modal>
+    <x-budget-modal status="active"></x-budget-modal>
     @push('scripts')
     <script>
         function openModal(id, title, amount, category, period){

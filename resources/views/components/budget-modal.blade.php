@@ -1,3 +1,4 @@
+@props(['status'])
 <!-- Modal toggle -->
 
 <!-- Main modal -->
@@ -18,7 +19,7 @@
                 </button>
             </div>
             <!-- Modal body -->
-            <form method="POST" action="/budgets" class="p-4 md:p-5">
+            <form method="POST" action="/budgets?status={{$status}}" class="p-4 md:p-5">
                 @csrf
                 @method('PATCH')
                 <input type="hidder" name="id" id="id">
@@ -41,6 +42,14 @@
                             <option selected="">Select period</option>
                             <option>Monthly</option>
                             <option>Yearly</option>
+                        </select>
+                    </div>
+                    <div class="col-span-2 sm:col-span-1">
+                        <label for="status" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status</label>
+                        <select id="status" name="status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                            <option selected="" disabled>Select status</option>
+                            <option>Active</option>
+                            <option>Inactive</option>
                         </select>
                     </div>
                 </div>

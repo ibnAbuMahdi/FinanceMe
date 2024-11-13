@@ -9,8 +9,8 @@ class BudgetController extends Controller
 {
     public function list(){
         $tenant = session('tenant');
-        $response = Http::withToken(session('token'))->get("$tenant.localhost:8000/budgets/");
-        if($response->status() != 200){
+        $response = Http::withToken(session('token'))->get("{$this->base_url}budgets/");
+        if(!$response->successful()){
             return back()->withErrors("An error was encountered.");
         }
         return view('budgets', ['data' => $response->json()]);
@@ -25,19 +25,22 @@ class BudgetController extends Controller
             'period' => ['required']
         ]);
         $data['period'] = strtolower($data['period']);
-        $tenants = ['personal' => 1, 'corporate' => 2];
-        $data['tenant'] = $tenants[$tenant];
-        $response = Http::withToken(session('token'))->post("$tenant.localhost:8000/budgets/", $data);
+        $data['tenant'] = $tenant;
+        $response = Http::withToken(session('token'))->post("{$this->base_url}budgets/", $data);
         if(!$response->successful()){
             return back()->withErrors("An error was encountered.");
         }
         return redirect('dashboard')->with('success-alert', 'Budget added successfully!');
     }
 
-    public function view(string $id){
-        $tenant = session('tenant');
-        $response = Http::withToken(session('token'))->get("$tenant.localhost:8000/budgets/$id/");
+    public function view(string $id, string $status = null){
+        $response = $status ? 
+            Http::withToken(session('token'))->get("{$this->base_url}budgets/$id/?active=false")
+        :
+            Http::withToken(session('token'))->get("{$this->base_url}budgets/$id/");
+
         if(!$response->successful()){
+            $response->throw();
             return back()->withErrors("An error was encountered.");
         }
         $data = $response->json();
@@ -45,8 +48,7 @@ class BudgetController extends Controller
     }
 
     public function destroy(string $id){
-        $tenant = session('tenant');
-        $response = Http::withToken(session('token'))->delete("$tenant.localhost:8000/budgets/$id/");
+        $response = Http::withToken(session('token'))->delete("{$this->base_url}budgets/$id/");
         if(!$response->successful()){
             return back()->withErrors("An error was encountered.");
         }
@@ -60,12 +62,19 @@ class BudgetController extends Controller
             'title'=>['required'],
             'category'=>[],
             'amount'=>['required'],
-            'period' => ['required']
+            'period' => ['required'],
+            'status' => [],
         ]);
-        $tenant = session('tenant');
         $data['period'] = strtolower($data['period']);
-        // dd($data);
-        $response = Http::withToken(session('token'))->patch("$tenant.localhost:8000/budgets/{$data['id']}/", $data);
+        if(in_array($data['status'], ['Active', 'Inactive'])){
+            $data['active'] = $data['status'] == 'Active' ? true : false;
+        }
+        unset($data['status']);
+        $response = $request->query('status') == 'inactive' ?
+            Http::withToken(session('token'))->patch("{$this->base_url}budgets/inactive/{$data['id']}/", $data)
+        :
+            Http::withToken(session('token'))->patch("{$this->base_url}budgets/{$data['id']}/", $data);
+
         if(!$response->successful()){
             $response->throw();
             return back()->withErrors("An error was encountered.");

@@ -34,17 +34,18 @@ class RegisteredUserController extends Controller
         $tenant = strtolower($userAttributes['account_type']);
         $tenants = ['personal' => 1, 'corporate' => 2];
         $userAttributes['tenant'] = $tenants[$tenant];
-        $response = Http::post("$tenant.localhost:8000/register/", $userAttributes);
+        $response = Http::post("{$this->base_url}register/", $userAttributes);
 
-        if($response->status() < 300){
-            session()->forget(['token', 'username', 'email']);
-            session(['tenant' => $tenant, 'token' => $response->json()['token'], 'username' => $response->json()['user']['username'], 'email' => $response->json()['user']['email']]);
-            return redirect('/');
+        if($response->successful()){
+            session()->forget(['token', 'username', 'email', 'tenant']);
+            session(['tenant' => $tenants[$tenant], 'token' => $response->json()['token'], 'username' => $response->json()['user']['username'], 'email' => $response->json()['user']['email']]);
+            return redirect('/dashboard');
         }
 
         // Auth::login($user);
+        $response->throw();
 
-        return redirect('/');
+        return redirect('/')->withErrors('Error encountered.');
     }
     
 }

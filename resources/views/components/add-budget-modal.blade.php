@@ -23,10 +23,10 @@
             </div>
             <!-- Modal body -->
             <x-forms.form method="POST" action="/budgets">
-                <x-forms.input label="Title" name="title" type="text" />
-                <x-forms.input label="Amount" name="amount" type="number" step="0.01" min="0" />
+                <x-forms.input label="Title" required name="title" type="text" />
+                <x-forms.input label="Amount" required name="amount" type="number" step="0.01" min="0.01" />
                 <x-forms.input label="Category" name="category" type="text" />
-                <x-forms.select label="Period" name="period">
+                <x-forms.select label="Period" required name="period">
                     <option>Monthly</option>
                     <option>Yearly</option>
                 </x-forms.select>

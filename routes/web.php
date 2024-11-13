@@ -27,6 +27,7 @@ Route::get('/budgets/{id}/transactions', [GeneralController::class, 'showTransac
 
 Route::get('/budgets', [BudgetController::class, 'list']);
 Route::get('/budgets/{id}', [BudgetController::class, 'view']);
+Route::get('/budgets/{id}/{status}', [BudgetController::class, 'view']);
 Route::delete('/budgets/{id}', [BudgetController::class, 'destroy']);
 Route::post('/budgets', [BudgetController::class, 'create']);
 Route::patch('/budgets', [BudgetController::class, 'update']);

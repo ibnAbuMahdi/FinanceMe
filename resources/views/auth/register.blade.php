@@ -1,10 +1,10 @@
 <x-layout>
     <x-page-heading>Register</x-page-heading>
     <x-forms.form method="POST" action="/register" enctype="multipart/form-data">
-        <x-forms.input label="Your Name" name="username"/>
-        <x-forms.input label="Email" name="email" type="email"/>
-        <x-forms.input label="Password" name="password" type="password"/>
-        <x-forms.input label="Password Confirmation" name="password_confirmation" type="password"/>
+        <x-forms.input label="Your Name" name="username" required/>
+        <x-forms.input label="Email" name="email" type="email" required/>
+        <x-forms.input label="Password" name="password" type="password" required/>
+        <x-forms.input label="Password Confirmation" name="password_confirmation" type="password" required/>
 
         <x-forms.select label="Account Type" name="account_type">
             <option>Personal</option>
